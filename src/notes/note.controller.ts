@@ -15,9 +15,17 @@ export class NoteController{
         return {status: "ok", notes: notes}
     }
 
+    @Get("test")
+    @UseGuards(AuthGuard)
+    async test(@Req() req: Request) {
+        const notes = await this.noteService.test(req.user.id)
+
+        return notes
+    }
+
     @Get(":id")
     @UseGuards(AuthGuard)
-    async getNote(@Param("id", ParseIntPipe) id: string | number, @Req() req: Request){
+    async getNote(@Param("id", ParseIntPipe) id: number, @Req() req: Request){
         const note = await this.noteService.getNote(req.user.id, id)
         return {status: "ok", note: note}
     }
@@ -31,15 +39,17 @@ export class NoteController{
 
     @Delete(":id")
     @UseGuards(AuthGuard)
-    async DeleteNote(@Req() req: Request, @Param("id", ParseIntPipe) id: string | number){
+    async DeleteNote(@Req() req: Request, @Param("id", ParseIntPipe) id: number){
         await this.noteService.deleteNote(id, req.user.id)
         return {status: "ok", message: "note deleted"}
     }
 
     @Patch(":id")
     @UseGuards(AuthGuard)
-    async editNote(@Req() req: Request, @Param("id", ParseIntPipe) id: string | number, @Body() data: EditNoteDto){
+    async editNote(@Req() req: Request, @Param("id", ParseIntPipe) id: number, @Body() data: EditNoteDto){
         const note = await this.noteService.editNote(data, id, req.user.id)
         return {status: "ok", note: note}
     }
+
+    
 }

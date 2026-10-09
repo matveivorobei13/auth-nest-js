@@ -1,14 +1,17 @@
 import { Pool } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import * as schema from './schema';
 
 export const databaseProvider = {
-  provide: 'PG_POOL',
+  provide: 'DRIZZLE_DB',
   useFactory: () => {
-    return new Pool({
+    const pool = new Pool({
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
     });
+    return drizzle(pool, { schema });
   },
 };

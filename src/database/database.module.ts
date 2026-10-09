@@ -3,6 +3,6 @@ import { databaseProvider } from "./database.provider";
 
 @Module({
     providers: [databaseProvider],
-    exports: ["PG_POOL"]
+    exports: ["DRIZZLE_DB"]
 })
 export class DatabaseModule{}

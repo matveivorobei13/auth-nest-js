@@ -11,10 +11,10 @@ export class UserService{
         return users
     }
 
-    async getUser(id: number | string): Promise<Omit<User, "password">>{
+    async getUser(id: number): Promise<Omit<User, "password">>{
         const user = await this.userRepository.getUser(id)
         if(!user) throw new NotFoundException("user not found")
-        const { password, ...UserWithoutPassword} = user
-        return UserWithoutPassword
+        
+        return user
     }
 }

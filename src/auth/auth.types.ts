@@ -1,9 +1,9 @@
 import { User } from "../users/user.types"
 
 export interface RefreshToken {
-    id: number | string,
+    id: number,
     token: string,
-    user_id: string,
+    user_id: number,
     created_at: Date,
     expires_at: Date
 }

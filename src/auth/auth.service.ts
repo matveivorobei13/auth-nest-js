@@ -58,11 +58,11 @@ export class AuthService{
         return { user: userWithoutPassword, access, refresh}
     }
 
-    async me(id: string | number): Promise<Omit<User, "password"> | undefined> {
+    async me(id: number): Promise<Omit<User, "password"> | undefined> {
         const user = await this.userRepository.getUser(id)
         if(!user) throw new NotFoundException("user not found")
-        const { password, ...userWithoutPassword } = user
-        return userWithoutPassword
+        
+        return user
     }
 
     async refresh(oldToken: string): Promise<Omit<Register, "user">>{

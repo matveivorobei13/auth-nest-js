@@ -1,21 +1,33 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { Pool } from "pg";
+
 import { User, UserPublic } from "./user.types";
+import type { Database } from "../database/database.types";
+import { users } from "../database/schema";
+import { eq } from "drizzle-orm";
 @Injectable()
 export class UserRepository{
     constructor(
-        @Inject('PG_POOL')
-        private readonly pool: Pool,
+        @Inject('DRIZZLE_DB')
+        private readonly db: Database,
     ) {}
 
     async getUsers(): Promise<UserPublic[]>{
-        const users = await this.pool.query<UserPublic>(`SELECT name, id, email, created_at FROM users`)
-        return users.rows
+        const result = await this.db.select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            created_at: users.created_at
+        }).from(users)
+        return result
     }
 
-    async getUser(id: number | string): Promise<User> {
-        const user = await this.pool.query<User>(`SELECT * FROM users
-            WHERE id = $1`, [id])
-        return user.rows[0]
+    async getUser(id: number): Promise<UserPublic> {
+        const result = await this.db.select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            created_at: users.created_at
+        }).from(users).where(eq(users.id, id))
+        return result[0]
     }
 }

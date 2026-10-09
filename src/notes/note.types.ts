@@ -1,6 +1,12 @@
 export interface Note {
-    id: number | string,
-    user_id: number | string,
-    title: number,
-    content: number
+    id: number,
+    user_id: number,
+    title: string,
+    content: string
+}
+
+export interface Test{
+    title: string,
+    email: string,
+    content: string
 }
